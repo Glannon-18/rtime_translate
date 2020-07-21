@@ -39,6 +39,7 @@
 <script src="js/jquery.js"></script>
 <script>
     var final_transcript = '';
+    var currentDom=undefined
     var recognition = new webkitSpeechRecognition();
     // recognition.lang = "vi-VN";
     recognition.lang = "cmn-Hans-CN";
@@ -79,14 +80,21 @@
         for (var i = event.resultIndex; i < event.results.length; ++i) {
             if (event.results[i].isFinal) {
                 final_transcript += event.results[i][0].transcript;
-                console.log(final_transcript+"++++++++")
-                $("#left").append("<div class=\"duanlu\"><p>" + final_transcript + "</p></div>")
-
+                // console.log(final_transcript+"++++++++")
+                // $("#left").append("<div class=\"duanlu\"><p>" + final_transcript + "</p></div>")
+                currentDom.find("p").html(final_transcript)
+                currentDom=undefined
                 translate("zh","vi",final_transcript)
                 final_transcript=""
             } else {
+                if (currentDom==undefined){
+                    currentDom=$("<div class=\"duanlu\"><p></p></div>")
+                    $("#left").append(currentDom)
+                }
                 interim_transcript += event.results[i][0].transcript;
-                console.log(final_transcript+"--------")
+                // console.log(interim_transcript+"--------")
+                currentDom.find("p").html(interim_transcript)
+
             }
         }
         // final_transcript = capitalize(final_transcript);
