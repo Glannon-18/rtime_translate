@@ -84,7 +84,7 @@ class IatRecorder {
             }
         } else {
             var isChrome = navigator.userAgent.toLowerCase().match(/chrome/)
-            alert(notSupportTip+"2222")
+            alert(notSupportTip + "2222")
         }
     }
 
@@ -126,7 +126,7 @@ class IatRecorder {
         } else if ('MozWebSocket' in window) {
             this.ws = new MozWebSocket(url)
         } else {
-            alert(notSupportTip+"1111")
+            alert(notSupportTip + "1111")
             return null
         }
         this.ws.onopen = (e) => {
@@ -213,6 +213,10 @@ class IatTaste {
     constructor() {
         var iatRecorder = new IatRecorder({
             onClose: () => {
+
+                $("#taste_button").removeClass("active")
+                $(".start-button").addClass("active")
+
                 this.stop()
                 this.reset()
             },
@@ -226,6 +230,10 @@ class IatTaste {
             },
             onStart: () => {
                 //处理打开样式
+                $(".duanlu").remove()
+
+                $("#taste_button").addClass("active")
+                $(".start-button").removeClass("active")
                 // $('hr').addClass('hr')
                 // var dialect = $('.dialect-select').find('option:selected').text()
                 // $('.taste-content').css('display', 'none')
@@ -275,7 +283,7 @@ class IatTaste {
             if (navigator.getUserMedia && AudioContext && recorderWorker) {
                 self.start()
             } else {
-                alert(notSupportTip+333)
+                alert(notSupportTip + 333)
             }
         })
         //结束
