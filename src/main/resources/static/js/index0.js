@@ -19,12 +19,12 @@ let AudioContext = window.AudioContext || window.webkitAudioContext
 let notSupportTip = '请试用chrome浏览器且域名为localhost或127.0.0.1测试'
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia
 
+let original_text = "";
+let translate_text = "";
+
 recorderWorker.onmessage = function (e) {
     buffer.push(...e.data.buffer)
 }
-
-let sentence_dom_str = "<div class=\"duanlu\"><p></p></div>"
-let sentence_temp = {}
 
 
 class IatRecorder {
@@ -230,19 +230,10 @@ class IatTaste {
             },
             onStart: () => {
                 //处理打开样式
-                $(".duanlu").remove()
 
                 $("#taste_button").addClass("active")
                 $(".start-button").removeClass("active")
-                // $('hr').addClass('hr')
-                // var dialect = $('.dialect-select').find('option:selected').text()
-                // $('.taste-content').css('display', 'none')
-                // $('.start-taste').addClass('flex-display-1')
-                // $('.dialect-select').css('display', 'none')
-                // $('.start-button').text('结束转写')
-                // $('.time-box').addClass('flex-display-1')
-                // $('.dialect').text(dialect).css('display', 'inline-block')
-                // this.counterDown($('.used-time'))
+
             }
         })
         this.iatRecorder = iatRecorder
@@ -261,7 +252,6 @@ class IatTaste {
     }
 
     stop() {
-        // $('hr').removeClass('hr')
         this.iatRecorder.stop()
     }
 
@@ -269,11 +259,6 @@ class IatTaste {
         this.counterDownTime = 0
         clearTimeout(this.counterDownTimeout)
         buffer = []
-        // $('.time-box').removeClass('flex-display-1').css('display', 'none')
-        // $('.start-button').text(this.text.start)
-        // $('.dialect').css('display', 'none')
-        // $('.dialect-select').css('display', 'inline-block')
-        // $('.taste-button').css('background', '#0b99ff')
     }
 
     init() {
@@ -288,47 +273,17 @@ class IatTaste {
         })
         //结束
         $('.start-button').click(function () {
-            console.log(111111)
-            // if ($(this).text() === self.text.start && !$(this).prop('disabled')) {
-            //     $('#result_output').text('')
-            //     self.resultText = ''
-            //     self.start()
-            //     //console.log("按钮非禁用状态，正常启动" + $(this).prop('disabled'))
-            // } else {
-            //     //$('.taste-content').css('display', 'none')
-            //     $('.start-button').attr('disabled', true);
             self.stop()
             //reset
             this.counterDownTime = 0
             clearTimeout(this.counterDownTimeout)
             buffer = []
-            //处理关闭样式
-            // $('.time-box').removeClass('flex-display-1').css('display', 'none')
-            // $('.start-button').text('转写停止中...')
-            // $('.dialect').css('display', 'none')
-            // $('.taste-button').css('background', '#8E8E8E')
-            // $('.dialect-select').css('display', 'inline-block')
 
-            //console.log("按钮非禁用状态，正常停止" + $(this).prop('disabled'))
-            // }
         })
     }
 
     setResult(data) {
         let rtasrResult = []
-        // var currentText = $('#result_output').html()
-        // let $sentence = $(sentence_dom_str)
-        if (Object.keys(sentence_temp).length === 0) {
-            console.log(Object.keys(sentence_temp).length)
-            let $sentence = $(sentence_dom_str)
-            sentence_temp = {
-                dom: $sentence,
-                tem_str: ""
-            }
-            $("#left").append(sentence_temp.dom)
-        }
-
-
         rtasrResult[data.seg_id] = data
         rtasrResult.forEach(i => {
             let str = ""
@@ -340,20 +295,19 @@ class IatTaste {
                     })
                 })
             })
-            console.log(str)
-            // console.log(sentence_temp.dom)
-            sentence_temp.dom.find("p").html(str)
-            if (i.cn.st.type == 0) {
-                this.translate("zh", "vi", str)
-                sentence_temp = {}
+            if (str == '') {
+                return
             }
-            // if (currentText.length == 0) {
-            //     $('#result_output').html(str)
-            // } else {
-            //     $('#result_output').html(currentText + "<br>" + str)
-            // }
-            // var ele = document.getElementById('result_output');
-            // ele.scrollTop = ele.scrollHeight;
+            console.log(str + "-------")
+            $("#left .duanlu p").html(original_text + str)
+            if (i.cn.st.type == 0) {
+                $("#left .duanlu p").html(original_text + str)
+                console.log(original_text + "-------" +str)
+                original_text +=  str
+                console.log(original_text + "+++++++" )
+                // this.translate("zh", "vi", str)
+            }
+
         })
     }
 
