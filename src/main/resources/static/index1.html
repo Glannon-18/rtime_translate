@@ -42,7 +42,7 @@
     var currentDom=undefined
     var recognition = new webkitSpeechRecognition();
     // recognition.lang = "vi-VN";
-    recognition.lang = "cmn-Hans-CN";
+    recognition.lang = "vi-VN";
     recognition.continuous = true;
     recognition.interimResults = true;
 
@@ -84,7 +84,8 @@
                 // $("#left").append("<div class=\"duanlu\"><p>" + final_transcript + "</p></div>")
                 currentDom.find("p").html(final_transcript)
                 currentDom=undefined
-                translate("zh","vi",final_transcript)
+                console.log(final_transcript)
+                translate("vi","zh",final_transcript)
                 final_transcript=""
             } else {
                 if (currentDom==undefined){
@@ -123,6 +124,7 @@
     }
 
     $("#taste_button").click(function () {
+        $(".duanlu").remove()
         recognition.start()
     })
 
