@@ -84,7 +84,7 @@ class IatRecorder {
             }
         } else {
             var isChrome = navigator.userAgent.toLowerCase().match(/chrome/)
-            alert(notSupportTip + "2222")
+            alert(notSupportTip)
         }
     }
 
@@ -126,7 +126,7 @@ class IatRecorder {
         } else if ('MozWebSocket' in window) {
             this.ws = new MozWebSocket(url)
         } else {
-            alert(notSupportTip + "1111")
+            alert(notSupportTip )
             return null
         }
         this.ws.onopen = (e) => {
@@ -268,7 +268,7 @@ class IatTaste {
             if (navigator.getUserMedia && AudioContext && recorderWorker) {
                 self.start()
             } else {
-                alert(notSupportTip + 333)
+                alert(notSupportTip)
             }
         })
         //结束
@@ -302,10 +302,10 @@ class IatTaste {
             $("#left .duanlu p").html(original_text + str)
             if (i.cn.st.type == 0) {
                 $("#left .duanlu p").html(original_text + str)
-                console.log(original_text + "-------" +str)
-                original_text +=  str
-                console.log(original_text + "+++++++" )
-                // this.translate("zh", "vi", str)
+                console.log(original_text + "-------" + str)
+                original_text += str
+                console.log(original_text + "+++++++")
+                this.translate("zh", "vi", str)
 
             }
 
@@ -347,7 +347,9 @@ class IatTaste {
             },
             dataType: "json",
             success: function (data) {
-                $("#right").append("<div class=\"duanlu\"><p>" + data.result + "</p></div>")
+                console.log(data)
+                $("#right .duanlu p").html(translate_text + data.result)
+                translate_text += data.result
             }
         })
 
