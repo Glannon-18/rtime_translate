@@ -306,6 +306,7 @@ class IatTaste {
                 original_text +=  str
                 console.log(original_text + "+++++++" )
                 // this.translate("zh", "vi", str)
+
             }
 
         })
