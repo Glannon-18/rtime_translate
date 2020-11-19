@@ -33,8 +33,8 @@ class IatRecorder {
         this.state = 'ing'
 
         //以下信息在控制台-我的应用-实时语音转写 页面获取
-        this.appId = '5f1510fe'
-        this.apiKey = '2edcc6ddb4e0cd10fd31109921e63a34'
+        this.appId = '5fb60e12'
+        this.apiKey = 'fa972437309b5ee3f7ecc21954be4e29'
     }
 
     start() {
@@ -229,10 +229,19 @@ class IatTaste {
                 this.setResult(JSON.parse(message))
             },
             onStart: () => {
+
+                original_text = "";
+                translate_text = "";
+
+                $("#left .duanlu p").html("")
+                $("#right .duanlu p").html("")
                 //处理打开样式
 
                 $("#taste_button").addClass("active")
                 $(".start-button").removeClass("active")
+
+
+
 
             }
         })
@@ -305,7 +314,7 @@ class IatTaste {
                 console.log(original_text + "-------" + str)
                 original_text += str
                 console.log(original_text + "+++++++")
-                this.translate("zh", "vi", str)
+                this.translate("zh", "vi", "py"+str)
 
             }
 
