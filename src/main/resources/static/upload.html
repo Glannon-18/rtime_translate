@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传文件翻译</title>
+</head>
+<script src="js/jquery.js"></script>
+
+<script>
+
+    $(function () {
+        $("#upload_file").click(function () {
+            let form_data = new FormData()
+            form_data.append("file", $("input[type='file']")[0])
+            $.ajax({
+                url: "/file/upload",
+                data: form_data,
+                dataType: "json",
+                contentType: false,
+                processData: false,
+                success: function (data, status) {
+                    alert(data)
+                }
+            });
+        })
+    })
+
+</script>
+<body>
+<div>
+    <form action="" enctype="multipart/form-data">
+        <label>上传文件</label>
+        <input type="file" name="file" accept=".wav">
+        <button id="upload_file">上传</button>
+    </form>
+</div>
+
+
+</body>
+</html>
