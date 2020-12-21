@@ -39,20 +39,20 @@
 <script src="js/jquery.js"></script>
 <script>
     var final_transcript = '';
-    var currentDom=undefined
+    var currentDom = undefined
     var recognition = new webkitSpeechRecognition();
     // recognition.lang = "vi-VN";
     recognition.lang = "vi-VN";
     recognition.continuous = true;
     recognition.interimResults = true;
 
-    recognition.onstart = function() {
+    recognition.onstart = function () {
         recognizing = true;
         $("#taste_button").addClass("active")
         $(".start-button").removeClass("active")
     };
 
-    recognition.onerror = function(event) {
+    recognition.onerror = function (event) {
         if (event.error == 'no-speech') {
 
         }
@@ -64,15 +64,15 @@
         }
     };
 
-    recognition.onend = function() {
+    recognition.onend = function () {
         recognizing = false;
         $("#taste_button").removeClass("active")
         $(".start-button").addClass("active")
     };
 
-    recognition.onresult = function(event) {
+    recognition.onresult = function (event) {
         var interim_transcript = '';
-        if (typeof(event.results) == 'undefined') {
+        if (typeof (event.results) == 'undefined') {
             recognition.onend = null;
             recognition.stop();
             return;
@@ -83,13 +83,13 @@
                 // console.log(final_transcript+"++++++++")
                 // $("#left").append("<div class=\"duanlu\"><p>" + final_transcript + "</p></div>")
                 currentDom.find("p").html(final_transcript)
-                currentDom=undefined
+                currentDom = undefined
                 console.log(final_transcript)
-                translate("vi","zh",final_transcript)
-                final_transcript=""
+                translate("vi", "zh", final_transcript)
+                final_transcript = ""
             } else {
-                if (currentDom==undefined){
-                    currentDom=$("<div class=\"duanlu\"><p></p></div>")
+                if (currentDom == undefined) {
+                    currentDom = $("<div class=\"duanlu\"><p></p></div>")
                     $("#left").append(currentDom)
                 }
                 interim_transcript += event.results[i][0].transcript;

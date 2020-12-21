@@ -48,7 +48,6 @@ public class TranslateController {
         post.setConfig(requestConfig);
         post.setEntity(new UrlEncodedFormEntity(urlParameters, "utf-8"));
         HttpResponse response = HTTPCLIENT.execute(post);
-        LOGGER.info("翻译接口返回码： " + response.getStatusLine().getStatusCode());
         StringBuffer result = new StringBuffer();
         BufferedReader rd = new BufferedReader(
                 new InputStreamReader(response.getEntity().getContent(), "utf-8"));
