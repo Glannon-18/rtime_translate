@@ -7,33 +7,31 @@
     <title>上传文件翻译</title>
 </head>
 <script src="js/jquery.js"></script>
+<script src="js/jquery.form.min.js"></script>
 
 <script>
 
     $(function () {
         $("#upload_file").click(function () {
-            let form_data = new FormData()
-            form_data.append("file", $("input[type='file']")[0])
-            $.ajax({
+            let form = $("form");
+            let options = {
                 url: "/file/upload",
-                data: form_data,
-                dataType: "json",
-                contentType: false,
-                processData: false,
-                success: function (data, status) {
-                    alert(data)
+                type: "post",
+                success: function (data) {
+                    alert(data.path)
                 }
-            });
+            }
+            form.ajaxSubmit(options)
         })
     })
 
 </script>
 <body>
 <div>
-    <form action="" enctype="multipart/form-data">
+    <form enctype="multipart/form-data">
         <label>上传文件</label>
         <input type="file" name="file" accept=".wav">
-        <button id="upload_file">上传</button>
+        <button id="upload_file" type="button">上传</button>
     </form>
 </div>
 

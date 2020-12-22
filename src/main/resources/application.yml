@@ -4,8 +4,9 @@
 translate_url: http://192.168.1.106:9998/NatureAPI/openapi.do
 server:
   port: 8080
-  ssl:
-    protocol: TLS
-    key-store: classpath:keystore.p12
-    key-store-password: 123456
-    key-store-type: PKCS12
+#  语音识别项目必须使用https
+#  ssl:
+#    protocol: TLS
+#    key-store: classpath:keystore.p12
+#    key-store-password: 123456
+#    key-store-type: PKCS12
