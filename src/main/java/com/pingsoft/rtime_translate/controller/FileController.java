@@ -43,11 +43,11 @@ public class FileController {
 
 
     @RequestMapping("/upload")
-    public Map<String, Object> upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
+    public Map<String, Object> upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException, InterruptedException {
         HashMap<String, Object> map = new HashMap<>();
         String saveName = UUID.randomUUID().toString() + ".wav";
         String webRootPath = request.getSession().getServletContext().getRealPath("/");
-        String pathname = webRootPath + File.separatorChar + saveName;
+        String pathname = webRootPath + saveName;
         File saveFile = new File(pathname);
         if (saveFile.getParentFile().exists()) {
             saveFile.getParentFile().mkdirs();
@@ -60,11 +60,13 @@ public class FileController {
         }
         JSONObject result = getMessage(id);
         Integer audio_status = result.getInteger("audio_status");
-        while (audio_status == 3) {
+        while (audio_status == 3 || audio_status == 2) {
+//            Thread.sleep(5000l);
             result = getMessage(id);
             audio_status = result.getInteger("audio_status");
+            System.out.println("返回audio_status的值为:" + audio_status);
         }
-        map.put("translate_text",result.getJSONObject("asr/normal").getJSONObject("data").getString("full_text"));
+        map.put("translate_text", result.getJSONObject("asr/normal").getJSONObject("data").getString("full_text"));
         return map;
     }
 
