@@ -3,6 +3,7 @@ package com.pingsoft.rtime_translate.controller;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +38,9 @@ public class TranslateController {
     private String translate_url;
 
     @PostMapping("/translate")
-    public Map<String, String> translate(@RequestParam String text, @RequestParam String srcLang, @RequestParam String tgtLang) throws Exception {
+    public Map<String, String> translate(@RequestParam String text, @RequestParam String srcLang, @RequestParam String tgtLang) {
+
+        Map<String, String> map = new HashMap<>();
         HttpPost post = new HttpPost(translate_url);
         List<NameValuePair> urlParameters = new ArrayList<>();
         urlParameters.add(new BasicNameValuePair("method", "translate"));
@@ -46,27 +51,38 @@ public class TranslateController {
 
         RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(3000).setConnectTimeout(3000).build();
         post.setConfig(requestConfig);
-        post.setEntity(new UrlEncodedFormEntity(urlParameters, "utf-8"));
-        HttpResponse response = HTTPCLIENT.execute(post);
-        StringBuffer result = new StringBuffer();
-        BufferedReader rd = new BufferedReader(
-                new InputStreamReader(response.getEntity().getContent(), "utf-8"));
-        String line = "";
-        while ((line = rd.readLine()) != null) {
-            result.append(line);
-        }
+        try {
+            post.setEntity(new UrlEncodedFormEntity(urlParameters, "utf-8"));
+            HttpResponse response = HTTPCLIENT.execute(post);
+            StringBuffer result = new StringBuffer();
+            BufferedReader rd = new BufferedReader(
+                    new InputStreamReader(response.getEntity().getContent(), "utf-8"));
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                result.append(line);
+            }
 
-        JSONObject result_obj = JSONObject.parseObject(result.toString());
-        EntityUtils.consume(response.getEntity());
-        if (result_obj.getString("success").equals("true")) {
-            String data = result_obj.getString("data").replaceAll("\\$number", "");
-            Map<String, String> map = new HashMap<>();
-            map.put("result", data);
-            return map;
-        } else {
-            throw new Exception("翻译接口返回的success为false");
+            JSONObject result_obj = JSONObject.parseObject(result.toString());
+            EntityUtils.consume(response.getEntity());
+            if (result_obj.getString("success").equals("true")) {
+                String data = result_obj.getString("data").replaceAll("\\$number", "");
+                map.put("result", data);
+            } else {
+                map.put("result", "翻译接口返回的success为false");
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+            map.put("result", e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            map.put("result", e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("result", e.getMessage());
         }
-
+        return map;
     }
 
 }
