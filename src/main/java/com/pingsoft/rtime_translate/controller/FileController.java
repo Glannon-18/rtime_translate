@@ -43,7 +43,7 @@ public class FileController {
 
 
     @RequestMapping("/upload")
-    public Map<String, Object> upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException, InterruptedException {
+    public Map<String, Object> upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws IOException {
         HashMap<String, Object> map = new HashMap<>();
         String saveName = UUID.randomUUID().toString() + ".wav";
         String webRootPath = request.getSession().getServletContext().getRealPath("/");
